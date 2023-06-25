@@ -1,32 +1,49 @@
 import { useState } from "react"
-import { Link, Navigate} from "react-router-dom";
+import { Link, useNavigate, Navigate} from "react-router-dom"
 import { useAuth } from "../context/authContext"
+import { useForm } from "react-hook-form"
 
 function Register() {
 
-    const [userForm, setUserForm] = useState({
-        name: "",
-        lastname: "",
+    const { register, formState: {
+        errors
+    } } = useForm()
+
+    const [userDataForm, setuserDataForm] = useState({
+        nombre: "",
+        apellido: "",
         email: "",
+        telefono: "",
         password: "",
+        idRol: "3",
+        preferencia : null
     });
 
-    const {signup, user} = useAuth()
+    const {signup, user, errors: registerErrors, isAuthenticated} = useAuth()
+    
+    const navigate = useNavigate()
 
     const handleChange = ({target: {name, value}}) => {
-        setUserForm({
-            ...userForm,
+        setuserDataForm({
+            ...userDataForm,
             [name]: value
         })
     }
 
     const handleSubmit = e => {
-        e.preventDefault()
-        //await y navigate
-        signup(userForm.name, userForm.lastname, userForm.email, userForm.password)
+        try {
+            e.preventDefault()
+            signup(userDataForm)
+            navigate('/login')
+        } catch (error) {
+            console.log("Error en el registro")
+        }
+        
     }
+
+    if (isAuthenticated) return <Navigate  to="/home" />
     
-    return user != null ? <Navigate to="/home" /> : (
+    return (
         <div className="hold-transition register-page">
             <div className="register-box">
                 <div className="card card-outline card-primary">
@@ -38,15 +55,29 @@ function Register() {
                 <div className="card-body">
                     <p className="login-box-msg">Ingresa tus datos para registrarse</p>
 
+                    {
+                        registerErrors.map((error, i) => (
+                          <p className="text-danger" style={{margin: "1px"}} key={i}>
+                            {error}
+                          </p>  
+                        ))
+                    }
+
                     <form onSubmit={handleSubmit}>
                         <div className="input-group mb-3">
                             <input
                             type="text"
-                            name="name"
+                            {...register('nombre', {required: true})}
                             className="form-control"
                             placeholder="Nombre"
                             onChange={handleChange}
                             />
+                            {
+                                errors.nombre && (
+                                    <p className="text-danger">Nombre requerido</p>
+                                )
+                            }
+
                             <div className="input-group-append">
                             <div className="input-group-text">
                                 <span className="fas fa-user" />
@@ -56,11 +87,17 @@ function Register() {
                         <div className="input-group mb-3">
                             <input
                             type="text"
-                            name="lastname"
+                            {...register('apellido', {required: true})}
                             className="form-control"
                             placeholder="Apellido"
                             onChange={handleChange}
                             />
+                            {
+                                errors.apellido && (
+                                    <p className="text-danger">Apellido requerido</p>
+                                )
+                            }
+
                             <div className="input-group-append">
                             <div className="input-group-text">
                                 <span className="fas fa-user" />
@@ -70,11 +107,37 @@ function Register() {
                         <div className="input-group mb-3">
                             <input
                             type="email"
-                            name="email"
+                            {...register('email', {required: true})}
                             className="form-control"
                             placeholder="Email"
                             onChange={handleChange}
                             />
+                            {
+                                errors.email && (
+                                    <p className="text-danger">Email requerido</p>
+                                )
+                            }
+
+                            <div className="input-group-append">
+                            <div className="input-group-text">
+                                <span className="fas fa-envelope" />
+                            </div>
+                            </div>
+                        </div>
+                        <div className="input-group mb-3">
+                            <input
+                            type="number"
+                            {...register('telefono', {required: true})}
+                            className="form-control"
+                            placeholder="Telefono"
+                            onChange={handleChange}
+                            />
+                            {
+                                errors.telefono && (
+                                    <p className="text-danger">Telefono requerido</p>
+                                )
+                            }
+
                             <div className="input-group-append">
                             <div className="input-group-text">
                                 <span className="fas fa-envelope" />
@@ -84,11 +147,17 @@ function Register() {
                         <div className="input-group mb-3">
                             <input
                             type="password"
-                            name="password"
+                            {...register('password', {required: true})}
                             className="form-control"
                             placeholder="Password"
                             onChange={handleChange}
                             />
+                            {
+                                errors.password && (
+                                    <p className="text-danger">Contraseña requerida</p>
+                                )
+                            }
+
                             <div className="input-group-append">
                             <div className="input-group-text">
                                 <span className="fas fa-lock" />

@@ -1,5 +1,4 @@
 import { useAuth } from "../context/authContext";
-import { Link } from "react-router-dom";
 
 function Home() {
 
@@ -7,7 +6,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Home - Welcome {user.name} {user.lastname} </h1>
+      <h1>Home - Welcome {user.nombre} {user.apellido} </h1>
     </div>
   )
 }

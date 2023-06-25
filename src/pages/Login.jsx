@@ -1,6 +1,7 @@
 import { useState } from "react"
-import {Link, Navigate, useNavigate} from 'react-router-dom';
-import { useAuth } from "../context/authContext";
+import {Link, Navigate, useNavigate} from 'react-router-dom'
+import { useAuth } from "../context/authContext"
+import { useForm } from "react-hook-form"
 
 function Login() {
 
@@ -9,9 +10,10 @@ function Login() {
         password: "",
     });
 
-    const {login, user} = useAuth()
+    const {login, user, emailAutocomplete, errors, isAuthenticated, loading} = useAuth()
 
     const navigate = useNavigate()
+
 
     const handleChange = ({target: {name, value}}) => {
         setUserForm({
@@ -20,22 +22,19 @@ function Login() {
         })
     }
 
-    const handleLogin = e => {
-        e.preventDefault()
-        //await y navigate
-        const userSession = login(userForm.email, userForm.password)
-        if ( userSession )
-        {
-            window.localStorage.setItem(
-                'userSession', JSON.stringify(userSession)
-            )
-            navigate('/home')
-        } else {
-            console.log("Error de login");
+    const handleLogin = async e => {
+        try {
+            e.preventDefault()
+            const userSession = await login(userForm)
+            if ( userSession ) navigate('/home')
+        } catch (error) {
+            console.log("Error en el login")
         }
     }
 
-    return user != null ? <Navigate to="/home" /> : (
+    if (isAuthenticated) return <Navigate to="/home" />
+
+    return (
         <div className="hold-transition login-page">
             <div className="login-box">
                 {/* /.login-logo */}
@@ -46,9 +45,17 @@ function Login() {
                     <div className="card-body">
                     <p className="login-box-msg">Ingresa tus datos para iniciar sesión</p>
 
+                    {
+                        errors.map((error, i) => (
+                          <p className="text-danger" style={{margin: "1px"}} key={i}>
+                            {error}
+                          </p>  
+                        ))
+                    }
+                    
                     <form onSubmit={handleLogin}>
                         <div className="input-group mb-3">
-                        <input type="email" name="email" className="form-control" placeholder="Email" onChange={handleChange}/>
+                        <input type="email" name="email" className="form-control" placeholder="Email" value={emailAutocomplete ? emailAutocomplete : useForm.email} onChange={handleChange}/>
                         <div className="input-group-append">
                             <div className="input-group-text">
                             <span className="fas fa-envelope" />

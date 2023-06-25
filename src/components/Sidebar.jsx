@@ -39,7 +39,7 @@ function Sidebar() {
           </div>
           <div className="info">
             <Link to="profile" className="d-block">
-              {user.name} {user.lastname}
+              {user.nombre} {user.apellido}
             </Link>
           </div>
         </div>
@@ -56,8 +56,9 @@ function Sidebar() {
             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
             
+            <NavItem title="Usuarios" route="usuarios" icon={faUsers}/>
             <NavItem title="Clientes" route="clientes" icon={faUsers}/>
-            <NavItem title="Barberos" route="especialistas" icon={faUsers}/>
+            <NavItem title="Barberos" route="barberos" icon={faUsers}/>
             <NavItem title="Servicios" route="servicios" icon={faScissors} />
             <NavItem title="Categorias" route="categorias" icon={faList}/>
             <NavItem title="Recomendaciones" route="recomendaciones" icon={faCamera}/>

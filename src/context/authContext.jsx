@@ -1,5 +1,6 @@
 import { createContext, useEffect, useContext, useState } from "react";
-import { usuarios } from "../assets/Users";
+import { registerRequest, loginRequest, verifyTokenReq, logoutRequest } from '../api/auth';
+import Cookies from 'js-cookie';
 
 const authContext = createContext();
 
@@ -9,57 +10,70 @@ export const useAuth = () => {
     return context
 }
 
-
 export function AuthProvider({children}) {
-
-    const [user, setUser] = useState(null)
-
-    useEffect(() => {
-      const userSession = window.localStorage.getItem('userSession')
-      if (userSession) {
-        const user = JSON.parse(userSession)
-        setUser(user[0])
-      }
-    }, [])
     
+    const [user, setUser] = useState(null)
+    const [emailAutocomplete, setEmailAutocomplete] = useState(null)
+    const [errors, setErrors] = useState([])
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-    const signup = (name, lastname, email, password) => {
-        console.log(name, lastname, email, password);
-        //llevar datos al backend para registrar
-        usuarios.push({
-            name,
-            lastname,
-            email,
-            password
-        })
-        console.log(usuarios);
-    }
-
-    const login = (email, password) => {
-        //llevar datos al backend para verificar login
-        // usuarios.push({
-        //     email,
-        //     password
-        // })
-        // console.log(usuarios);
-
-        if (usuarios[0].email == email && usuarios[0].password == password){
-            setUser(usuarios[0])
-            return usuarios;
+    useEffect( () =>{
+        async function checkLogin(){
+            const cookies = Cookies.get()
+            if (!cookies.token) {
+                setIsAuthenticated(false)
+                setUser(null)
+                return;
+            }
+            try {
+                const res = await verifyTokenReq(cookies.token)
+                if (!res.data){
+                    setIsAuthenticated(false)
+                    return;
+                } 
+                setIsAuthenticated(true)
+                setUser(res.data)
+            } catch (error) {
+                setIsAuthenticated(false)
+                setUser(null)
+            }
+            
         }
-        return;
+        checkLogin();
+    }, [])
+
+    const signup = async (userRegister) => {
+        try {
+            //llevar datos al backend para registrar
+            const res = await registerRequest(userRegister)
+            setEmailAutocomplete(res.data.email)
+        } catch (error) {
+            setErrors(error.response.data)
+        }
     }
 
-    const logout = () => {
-        //cerrar sesion del usuario
-        setUser(null)
-        window.localStorage.removeItem('userSession')
-        return;
+    const login = async (userLogin) => {
+        try {
+            //llevar datos al backend para registrar
+            const res = await loginRequest(userLogin)
+            setIsAuthenticated(true)
+            setUser(res.data)
+            return res.data;
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
+
+    const logout = async () => {
+        //cerrar sesion del usuario en el backend
+       const res = await logoutRequest()
+       setUser(null)
+       setIsAuthenticated(false)
     }
     
 
     return (
-    <authContext.Provider value={{signup, login, user, logout}}>
+    <authContext.Provider value={{signup, login, user, logout, emailAutocomplete, errors, isAuthenticated}}>
         {children}
     </authContext.Provider>
   )

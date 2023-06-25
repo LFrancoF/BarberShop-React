@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { HelmetProvider } from "react-helmet-async"
 
+import Usuarios from './pages/Usuarios'
 import Clientes from './pages/Clientes'
-import Especialistas from './pages/Especialistas'
+import Barberos from './pages/Barberos.jsx'
 import Servicios from './pages/Servicios'
 import Categorias from './pages/Categorias.jsx'
 import Citas from './pages/Citas.jsx';
@@ -36,12 +38,16 @@ const router = createBrowserRouter([
         element: <Home/>,
       },
       {
+        path: "usuarios",
+        element: <Usuarios/>,
+      },
+      {
         path: "clientes",
         element: <Clientes/>,
       },
       {
-        path: "especialistas",
-        element: <Especialistas/>,
+        path: "barberos",
+        element: <Barberos/>,
       },
       {
         path: "servicios",
@@ -70,7 +76,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <HelmetProvider>
+        <RouterProvider router={router} />
+      </HelmetProvider>
     </AuthProvider>
   </React.StrictMode>,
 )

@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 
-function Clientes() {
-
+function Barberos() {
+  
   return (
     <>
     {/* Content Header (Page header) */}
@@ -9,9 +9,7 @@ function Clientes() {
       <div className="container-fluid">
         <div className="row mb-2">
           <div className="card-body">
-            <h1 style={{fontSize:"40px"}}>Clientes</h1>
-
-            
+            <h1 style={{fontSize:"40px"}}>Barberos</h1>
           </div>
           <div className="col-sm-6">
             <ol className="breadcrumb float-sm-right">
@@ -30,17 +28,17 @@ function Clientes() {
             {/* /.card */}
             <div className="card">
               <div className="card-header">
-                <h3 className="card-title">Lista de Clientes</h3>
+                <h3 className="card-title">Lista de Barberos</h3>
               </div>
               {/* /.card-header */}
               <div className="card-body">
-                <table id="clientesTable" className="table table-bordered table-striped">
+                <table id="barberosTable" className="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>ID</th>
                       <th>Nombre Completo</th>
                       <th>Telefono</th>
-                      <th>Direccion</th>
+                      <th>Especialidad</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -59,10 +57,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Pampa de la Isla
+                          Cortes
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around" >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -94,10 +92,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Villa 1ero de Mayo
+                          Cortes
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -129,10 +127,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          B/ 23 de diciembre
+                          Estetica
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -164,10 +162,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Pampa de la Isla
+                          Tratamientos faciales
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -199,10 +197,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Av. Monseñor Rivero
+                          Cortes
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -234,10 +232,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Pampa de la Isla
+                          Estetica
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -269,10 +267,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Plan 3000
+                          Estetica
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -304,10 +302,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Pampa de la Isla
+                          Cortes
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -339,10 +337,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Urb. Valle Sanchez
+                          Cortes
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -374,10 +372,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Pampa de la Isla
+                          Tratamientos faciales
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -409,10 +407,10 @@ function Clientes() {
                       </td>
                       <td>
                         <a>
-                          Z/Pampa de la Isla
+                          Cortes
                         </a>
                       </td>
-                      <td className=" project-actions text-right d-flex justify-content-around"  >
+                      <td className="project-actions text-right d-flex justify-content-around">
                           <a className="btn btn-primary btn-sm" href="#" >
                               <i className="fas fa-folder">
                               </i>
@@ -453,11 +451,11 @@ function Clientes() {
       {/* /.container-fluid */}
     </section>
     <Helmet>
-      <script src="/adminlte-react/datatable.js" id="clientesScript"> 
+      <script src="/adminlte-react/datatable.js" id="barberosScript"> 
       </script>
     </Helmet>
     </>
   )
 }
 
-export default Clientes
+export default Barberos

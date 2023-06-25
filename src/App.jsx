@@ -6,9 +6,11 @@ import { useAuth } from "./context/authContext";
 
 function App() {
 
-  const { user } = useAuth()
+  const { user, isAuthenticated, loading } = useAuth()
 
-  return  user == null ? <Navigate to="/login" /> : (
+  if (!isAuthenticated) return <Navigate to="/login" />
+
+  return  (
     <div className="wrapper">
 
       {/* Preloader }
