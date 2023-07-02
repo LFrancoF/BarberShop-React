@@ -28,3 +28,9 @@ $(function () {
     "buttons": ["copy", "pdf", "colvis"]
   }).buttons().container().appendTo('#usuariosTable_wrapper .col-md-6:eq(0)');
 });
+$(function () {
+  $("#citasTable").DataTable({
+    "responsive": true, "lengthChange": false, "autoWidth": false,
+    "buttons": ["copy", "pdf", "colvis"]
+  }).buttons().container().appendTo('#citasTable_wrapper .col-md-6:eq(0)');
+});

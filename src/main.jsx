@@ -1,77 +1,153 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
 import './index.css'
+import App from './App'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { HelmetProvider } from "react-helmet-async"
+import { Usuarios, CrearUsuario, InfoUsuario, EditarUsuario,
+        Barberos, CrearBarbero, InfoBarbero, EditarBarbero,
+        Clientes, CrearCliente, InfoCliente, EditarCliente,
+        Servicios, CrearServicio, InfoServicio, EditarServicio,
+        Categorias, CrearCategoria, EditarCategoria, InfoCategoria,
+        Citas, CrearCita, EditarCita, InfoCita,
+        Recomendaciones, ListaRecomendaciones, InfoRecomendacion,
+        ErrorPage, Home, Login, Profile, Register } from './pages/index'
 
-import Usuarios from './pages/Usuarios'
-import Clientes from './pages/Clientes'
-import Barberos from './pages/Barberos.jsx'
-import Servicios from './pages/Servicios'
-import Categorias from './pages/Categorias.jsx'
-import Citas from './pages/Citas.jsx';
-import Recomendaciones from './pages/Recomendaciones.jsx'
-import ErrorPage from './pages/ErrorPage'
-import Login from './pages/Login'
-import Home from './pages/Home'
-import Profile from './pages/Profile'
-import Register from './pages/Register.jsx';
 import { AuthProvider } from './context/authContext'
 
 const router = createBrowserRouter([
   {
-    path: "/login",
-    element: <Login />,
+      path: "/login",
+      element: <Login />,
   },
   {
-    path: "/register",
-    element: <Register />,
+      path: "/register",
+      element: <Register />,
   },
   {
-    path: "/",
-    element: <App />,
-    children: [
+      path: "/",
+      element: <App />,
+      children: [
       {index: true, element: <Home/>},
       {
-        path: "home",
-        element: <Home/>,
+          path: "home",
+          element: <Home/>,
+      },
+          {
+              path: "usuarios",
+              element: <Usuarios/>,
+          },
+          {
+              path: "usuarios/crear",
+              element: <CrearUsuario/>,
+          },
+          {
+              path: "usuarios/ver",
+              element: <InfoUsuario/>,
+          },
+          {
+              path: "usuarios/editar",
+              element: <EditarUsuario/>,
+          },
+      {
+          path: "clientes",
+          element: <Clientes/>,
       },
       {
-        path: "usuarios",
-        element: <Usuarios/>,
+          path: "clientes/crear",
+          element: <CrearCliente/>,
       },
       {
-        path: "clientes",
-        element: <Clientes/>,
+          path: "clientes/ver",
+          element: <InfoCliente/>,
       },
       {
-        path: "barberos",
-        element: <Barberos/>,
+          path: "clientes/editar",
+          element: <EditarCliente/>,
+      },
+          {
+              path: "barberos",
+              element: <Barberos/>,
+          },
+          {
+              path: "barberos/crear",
+              element: <CrearBarbero/>,
+          },
+          {
+              path: "barberos/ver",
+              element: <InfoBarbero/>,
+          },
+          {
+              path: "barberos/editar",
+              element: <EditarBarbero/>,
+          },
+      {
+          path: "servicios",
+          element: <Servicios/>,
       },
       {
-        path: "servicios",
-        element: <Servicios/>,
+          path: "servicios/crear",
+          element: <CrearServicio/>,
       },
       {
-        path: "categorias",
-        element: <Categorias/>,
+          path: "servicios/ver",
+          element: <InfoServicio/>,
       },
       {
-        path: "recomendaciones",
-        element: <Recomendaciones/>,
+          path: "servicios/editar",
+          element: <EditarServicio/>,
+      },
+          {
+              path: "categorias",
+              element: <Categorias/>,
+          },
+          {
+              path: "categorias/crear",
+              element: <CrearCategoria/>,
+          },
+          {
+              path: "categorias/ver",
+              element: <InfoCategoria/>,
+          },
+          {
+              path: "categorias/editar",
+              element: <EditarCategoria/>,
+          },
+      {
+          path: "recomendaciones",
+          element: <Recomendaciones/>,
       },
       {
-        path: "citas",
-        element: <Citas/>,
+          path: "recomendaciones/lista",
+          element: <ListaRecomendaciones/>,
       },
       {
-        path: "profile",
-        element: <Profile/>,
+          path: "recomendaciones/ver",
+          element: <InfoRecomendacion/>,
       },
-    ]
+          {
+              path: "citas",
+              element: <Citas/>,
+          },
+          {
+              path: "citas/crear",
+              element: <CrearCita/>,
+          },
+          {
+              path: "citas/editar",
+              element: <EditarCita/>,
+          },
+          {
+              path: "citas/ver",
+              element: <InfoCita/>,
+          },
+      {
+          path: "profile",
+          element: <Profile/>,
+      },
+      ]
   },
-]);
+])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

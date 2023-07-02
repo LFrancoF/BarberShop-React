@@ -1,5 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/authContext";
+import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "../context/authContext"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 function Header() {
 
@@ -85,26 +87,21 @@ function Header() {
           </Link>
         </li>
         <li className="nav-item dropdown">
-          <a className="nav-link" data-toggle="dropdown" href="#">
-            <i className="fas fa-th-large" />
-          </a>
+          <Link className="nav-link" data-toggle="dropdown" to="#">
+            <FontAwesomeIcon icon={faBars} />
+          </Link>
           <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <span className="dropdown-item dropdown-header">Opciones</span>
             <div className="dropdown-divider" />
-            <a href="#" className="dropdown-item">
-              <i className="fas fa-users mr-2" /> Perfil
-              <span className="float-right text-muted text-sm">3 mins</span>
-            </a>
-            <div className="dropdown-divider" />
-            <a href="#" className="dropdown-item">
-              <i className="fas fa-file mr-2" /> Reportes
+            <Link to="/citas" className="dropdown-item">
+              <i className="fas fa-file mr-2" /> Reporte citas
               <span className="float-right text-muted text-sm">2 days</span>
-            </a>
+            </Link>
             <div className="dropdown-divider" />
-            <a href="#" className="dropdown-item">
+            <Link to="#" className="dropdown-item">
               <i className="fas fa-file mr-2" /> Acerca del Proyecto
               <span className="float-right text-muted text-sm">12 hours</span>
-            </a>
+            </Link>
             <div className="dropdown-divider" />
             <div to="" className="dropdown-item dropdown-footer">
               <button style={{border: "none", backgroundColor: "transparent"}} onClick={handleLogout}>

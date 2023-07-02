@@ -1,22 +1,22 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo, faEnvelope } from "@fortawesome/free-solid-svg-icons"
-import { Link } from "react-router-dom" 
+import { Link } from "react-router-dom"
 
-function Profile() {
+function InfoUsuario() {
   return (
     <>
       <section className="content-header">
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1>Perfil de Usuario</h1>
+              <h1>Info de Usuario</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
                   Home
                 </li>
-                <li className="breadcrumb-item active">Perfil</li>
+                <li className="breadcrumb-item active">Info</li>
               </ol>
             </div>
           </div>
@@ -51,7 +51,7 @@ function Profile() {
                 {/* About Me Box */}
                 <div className="card card-primary">
                     <div className="card-header">
-                        <h3 className="card-title">Mi Informacion</h3>
+                        <h3 className="card-title">Datos del Usuario</h3>
                     </div>
                     {/* /.card-header */}
                     <div className="card-body">
@@ -84,7 +84,7 @@ function Profile() {
                         <hr />
                     </div>
                     {/* /.card-body */}
-                    <Link to="/home" className='ml-auto mr-2 mb-2'>
+                    <Link to="/usuarios" className='ml-auto mr-2 mb-2'>
                       <button type="button" className="btn btn-secondary">Atras</button>
                     </Link>
                 </div>
@@ -96,4 +96,4 @@ function Profile() {
   );
 }
 
-export default Profile
+export default InfoUsuario

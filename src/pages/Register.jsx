@@ -9,7 +9,7 @@ function Register() {
         errors
     } } = useForm()
 
-    const [userDataForm, setuserDataForm] = useState({
+    const [userDataForm, setUserDataForm] = useState({
         nombre: "",
         apellido: "",
         email: "",
@@ -24,7 +24,7 @@ function Register() {
     const navigate = useNavigate()
 
     const handleChange = ({target: {name, value}}) => {
-        setuserDataForm({
+        setUserDataForm({
             ...userDataForm,
             [name]: value
         })
