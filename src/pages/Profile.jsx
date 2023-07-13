@@ -1,15 +1,65 @@
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleInfo, faEnvelope } from "@fortawesome/free-solid-svg-icons"
-import { Link } from "react-router-dom" 
+import { faCircleInfo, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons"
+import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "../context/authContext"
+import { getBarberRequest } from "../api/barberos.js"
+import { getClientRequest } from "../api/clientes.js"
+import Feature from './Feature';
+
 
 function Profile() {
+
+  const [userData, setUserData] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+    preferencia: null,
+    especialidad: null
+  })
+
+  useEffect(() => {
+    async function usuario(){
+      try {
+        let especialidad
+        let preferencia
+        if(user.rol == "Barbero"){
+          const barber = await getBarberRequest(user.id)
+          especialidad = barber.data.especialidad
+        }
+
+        if(user.rol == "Cliente"){
+          const client = await getClientRequest(user.id)
+          preferencia = client.data.preferencia
+        }
+
+        setUserData({
+          nombre: user.nombre,
+          apellido: user.apellido,
+          email: user.email,
+          telefono: user.telefono,
+          preferencia: preferencia,
+          especialidad: especialidad
+        })
+      } catch (error) {
+        setUserData(null)
+      }
+    }
+    usuario();
+  }, [])
+
+  const { user } = useAuth()
+
+  const navigate = useNavigate()
+
   return (
     <>
       <section className="content-header">
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1>Perfil de Usuario</h1>
+              <h1>Perfil de Usuario </h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
@@ -39,9 +89,9 @@ function Profile() {
                     />
                   </div>
                   <h3 className="profile-username text-center">
-                    Gustavo Franco Moron
+                    {userData.nombre} {userData.apellido}
                   </h3>
-                  <p className="text-muted text-center">Administrador</p>
+                  <p className="text-muted text-center">{user.rol}</p>
                 </div>
                 {/* /.card-body */}
               </div>
@@ -59,34 +109,38 @@ function Profile() {
                             <FontAwesomeIcon icon={faCircleInfo} className='mr-1' />
                             Nombre
                         </strong>
-                        <p className="text-muted"> Gustavo L </p>
+                        <p className="text-muted"> {userData.nombre} </p>
                         <hr />
                         <strong>
                             <FontAwesomeIcon icon={faCircleInfo} className='mr-1' />
                             Apellido
                         </strong>
-                        <p className="text-muted"> Franco Moron </p>
+                        <p className="text-muted"> {userData.apellido} </p>
                         <hr />
                         <strong>
                             <FontAwesomeIcon icon={faEnvelope} className='mr-1' />
                             Correo electronico
                         </strong>
                         <p className="text-muted">
-                        <span className="tag tag-danger"> gustavo@email.com </span>
+                        <span className="tag tag-danger"> {userData.email} </span>
                         </p>
                         <hr />
                         <strong>
-                        <i className="far fa-file-alt mr-1" /> Preferencia o Especialidad
+                            <FontAwesomeIcon icon={faPhone} className='mr-1' />
+                            Telefono
                         </strong>
                         <p className="text-muted">
-                            Preferencia si es cliente, especialidad si es barbero, si es admin nada
+                            {userData.telefono}
                         </p>
                         <hr />
+
+                        <Feature rol={user.rol} pref={userData.preferencia} esp={userData.especialidad} />
                     </div>
                     {/* /.card-body */}
-                    <Link to="/home" className='ml-auto mr-2 mb-2'>
-                      <button type="button" className="btn btn-secondary">Atras</button>
-                    </Link>
+                    {/* <Link to="/home" className='ml-auto mr-2 mb-2'> */}
+                      <button type="button" className="btn btn-secondary ml-auto mr-2 mb-2"
+                       onClick={()=> navigate(-1)}>Atras</button>
+                    {/* </Link> */}
                 </div>
             </div>
           </div>

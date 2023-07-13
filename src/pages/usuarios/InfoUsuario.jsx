@@ -1,8 +1,40 @@
+import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleInfo, faEnvelope } from "@fortawesome/free-solid-svg-icons"
-import { Link } from "react-router-dom"
+import { faCircleInfo, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons"
+import { useNavigate, useParams } from "react-router-dom"
+import { getUserRequest } from "../../api/usuarios.js"
 
 function InfoUsuario() {
+
+  const [userData, setUserData] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+    rol: ""
+  })
+
+  const params = useParams()
+
+  useEffect(() => {
+    async function usuarioData(){
+      if (params.id){
+          const res = await getUserRequest(params.id)
+          setUserData({
+              nombre: res.data.nombre,
+              apellido: res.data.apellido,
+              email: res.data.email,
+              telefono: res.data.telefono,
+              rol: res.data.rol
+          })
+      }
+    }
+    usuarioData()
+  }, [])
+
+  const navigate = useNavigate()
+  
+
   return (
     <>
       <section className="content-header">
@@ -39,9 +71,9 @@ function InfoUsuario() {
                     />
                   </div>
                   <h3 className="profile-username text-center">
-                    Gustavo Franco Moron
+                    {userData.nombre} {userData.apellido}
                   </h3>
-                  <p className="text-muted text-center">Administrador</p>
+                  <p className="text-muted text-center"> {userData.rol} </p>
                 </div>
                 {/* /.card-body */}
               </div>
@@ -59,34 +91,34 @@ function InfoUsuario() {
                             <FontAwesomeIcon icon={faCircleInfo} className='mr-1' />
                             Nombre
                         </strong>
-                        <p className="text-muted"> Gustavo L </p>
+                        <p className="text-muted"> {userData.nombre} </p>
                         <hr />
                         <strong>
                             <FontAwesomeIcon icon={faCircleInfo} className='mr-1' />
                             Apellido
                         </strong>
-                        <p className="text-muted"> Franco Moron </p>
+                        <p className="text-muted"> {userData.apellido} </p>
                         <hr />
                         <strong>
                             <FontAwesomeIcon icon={faEnvelope} className='mr-1' />
                             Correo electronico
                         </strong>
                         <p className="text-muted">
-                        <span className="tag tag-danger"> gustavo@email.com </span>
+                        <span className="tag tag-danger"> {userData.email} </span>
                         </p>
                         <hr />
                         <strong>
-                        <i className="far fa-file-alt mr-1" /> Preferencia o Especialidad
+                            <FontAwesomeIcon icon={faPhone} className='mr-1' />
+                            Telefono
                         </strong>
                         <p className="text-muted">
-                            Preferencia si es cliente, especialidad si es barbero, si es admin nada
+                            {userData.telefono}
                         </p>
                         <hr />
                     </div>
                     {/* /.card-body */}
-                    <Link to="/usuarios" className='ml-auto mr-2 mb-2'>
-                      <button type="button" className="btn btn-secondary">Atras</button>
-                    </Link>
+                    <button type="button" className="btn btn-secondary ml-auto mr-2 mb-2"
+                       onClick={()=> navigate(-1)}>Atras</button>
                 </div>
             </div>
           </div>

@@ -56,13 +56,30 @@ function Sidebar() {
             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
             
-            <NavItem title="Usuarios" route="usuarios" icon={faUsers}/>
-            <NavItem title="Clientes" route="clientes" icon={faUsers}/>
-            <NavItem title="Barberos" route="barberos" icon={faUsers}/>
-            <NavItem title="Servicios" route="servicios" icon={faScissors} />
-            <NavItem title="Categorias" route="categorias" icon={faList}/>
-            <NavItem title="Recomendaciones" route="recomendaciones" icon={faCamera}/>
-            <NavItem title="Citas" route="citas" icon={faCalendarCheck}/>
+            { (user.rol == "Administrador") ? (
+              <>
+                <NavItem title="Usuarios" route="usuarios" icon={faUsers}/>
+                <NavItem title="Clientes" route="clientes" icon={faUsers}/>
+                <NavItem title="Barberos" route="barberos" icon={faUsers}/>
+                <NavItem title="Servicios" route="servicios" icon={faScissors} />
+                <NavItem title="Categorias" route="categorias" icon={faList}/>
+                <NavItem title="Citas" route="citas" icon={faCalendarCheck}/>
+              </>
+            ) : (user.rol == "Barbero") ? (
+              <>
+                <NavItem title="Clientes" route="clientes" icon={faUsers}/>
+                <NavItem title="Servicios" route="servicios" icon={faScissors} />
+                <NavItem title="Categorias" route="categorias" icon={faList}/>
+                <NavItem title="Mis Citas" route="citas" icon={faCalendarCheck}/>
+              </>
+            ) : (user.rol == "Cliente") ? (
+              <>
+                <NavItem title="Barberos" route="barberos" icon={faUsers}/>
+                <NavItem title="Servicios" route="servicios" icon={faScissors} />
+                {/* <NavItem title="Recomendacion" route="recomendaciones" icon={faCamera}/> */}
+                <NavItem title="Mis Citas" route="citas" icon={faCalendarCheck}/>
+              </>
+            ) : (<></>)}
             
           </ul>
         </nav>

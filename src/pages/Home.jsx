@@ -1,12 +1,10 @@
-import { useAuth } from "../context/authContext";
-
 function Home() {
-
-  const { user } = useAuth()
 
   return (
     <div>
-      <h1>Home - Welcome {user.nombre} {user.apellido} </h1>
+      <div className="d-flex align-items-center justify-content-center vh-100">
+        <h1 className="display-1 text-center">Bienvenido</h1>
+      </div>
     </div>
   )
 }

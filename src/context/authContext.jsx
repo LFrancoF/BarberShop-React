@@ -13,7 +13,6 @@ export const useAuth = () => {
 export function AuthProvider({children}) {
     
     const [user, setUser] = useState(null)
-    const [emailAutocomplete, setEmailAutocomplete] = useState(null)
     const [errors, setErrors] = useState([])
     const [isAuthenticated, setIsAuthenticated] = useState(false)
 
@@ -44,9 +43,10 @@ export function AuthProvider({children}) {
 
     const signup = async (userRegister) => {
         try {
+            setErrors([])
             //llevar datos al backend para registrar
             const res = await registerRequest(userRegister)
-            setEmailAutocomplete(res.data.email)
+            return res.data;
         } catch (error) {
             setErrors(error.response.data)
         }
@@ -54,6 +54,7 @@ export function AuthProvider({children}) {
 
     const login = async (userLogin) => {
         try {
+            setErrors([])
             //llevar datos al backend para registrar
             const res = await loginRequest(userLogin)
             setIsAuthenticated(true)
@@ -70,10 +71,14 @@ export function AuthProvider({children}) {
        setUser(null)
        setIsAuthenticated(false)
     }
+
+    const deleteErrors = async () => {
+        setErrors([])
+    }
     
 
     return (
-    <authContext.Provider value={{signup, login, user, logout, emailAutocomplete, errors, isAuthenticated}}>
+    <authContext.Provider value={{signup, login, user, logout, errors, deleteErrors, isAuthenticated}}>
         {children}
     </authContext.Provider>
   )

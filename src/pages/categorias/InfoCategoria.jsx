@@ -1,6 +1,33 @@
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { getCategoryRequest } from "../../api/categorias.js"
 
 function InfoCategoria() {
+
+    const [categoryData, setCategoryData] = useState({
+        idCategoria: "",
+        nombre: "",
+        descripcion: ""
+      })
+    
+      const params = useParams()
+    
+      useEffect(() => {
+        async function categoriaData(){
+          if (params.id){
+              const res = await getCategoryRequest(params.id)
+              setCategoryData({
+                idCategoria : res.data.idCategoria,
+                nombre: res.data.nombre,
+                descripcion: res.data.descripcion
+              })
+          }
+        }
+        categoriaData()
+      }, [])
+
+      const navigate = useNavigate()
+
     return (
         <>
         <section className="content-header">
@@ -25,7 +52,7 @@ function InfoCategoria() {
                     <div className="card-header">
                         <h3 className="card-title">
                         <i className="fas fa-calendar mr-2" />
-                            # 1
+                            # {categoryData.idCategoria}
                         </h3>
                     </div>
                     {/* /.card-header */}
@@ -33,19 +60,18 @@ function InfoCategoria() {
                         <dl className="row">
                             <dt className="col-sm-4">Nombre</dt>
                             <dd className="col-sm-8">
-                                Cortes de Cabello
+                                {categoryData.nombre}
                             </dd>
-                            <dt className="col-sm-4">Observacion</dt>
+                            <dt className="col-sm-4">Descripcion</dt>
                             <dd className="col-sm-8">
-                                Observacion de la categoria
+                                {categoryData.descripcion}
                             </dd>
                         </dl>
                     </div>
                     {/* /.card-body */}
                 </div>
-                <Link to="/categorias">
-                    <button type="button" className="btn btn-primary">Cerrar</button>
-                </Link>
+                <button type="button" className="btn btn-secondary mr-2"
+                        onClick={()=> navigate(-1)}>Atras</button>
             </div>
         </section>
         </>

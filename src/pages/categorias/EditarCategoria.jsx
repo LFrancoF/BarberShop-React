@@ -1,10 +1,50 @@
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams, Link } from "react-router-dom"
+import { getCategoryRequest, editCategoryRequest } from "../../api/categorias.js"
 
 function EditarCategoria() {
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        console.log("editando categoria")
+    const [errors, setErrors] = useState([])
+    const [title, setTitle] = useState("")
+    const [categoryData, setCategoryData] = useState({
+        nombre: "",
+        descripcion: ""
+    })
+
+    const params = useParams()
+
+    useEffect(() => {
+        async function categoriaData(){
+            if (params.id){
+                const res = await getCategoryRequest(params.id)
+                setCategoryData({
+                    nombre: res.data.nombre,
+                    descripcion: res.data.descripcion
+                })
+                setTitle(res.data.nombre)
+            }
+        }
+        categoriaData()
+    }, [])
+
+    const handleChange = ({target: {name, value}}) => {
+        setCategoryData({
+            ...categoryData,
+            [name]: value
+        })
+    }
+    
+    const navigate = useNavigate()
+
+    const handleSubmit = async e => {
+        try {
+            e.preventDefault()
+            await editCategoryRequest(params.id, categoryData)
+            navigate('/categorias')
+
+        } catch (error) {
+            setErrors(error.response.data)
+        }
         
     }
 
@@ -14,7 +54,7 @@ function EditarCategoria() {
         <div className="container-fluid">
             <div className="row mb-2">
             <div className="col-sm-6">
-                <h1>Editar categoria : Nombre categoria</h1>
+                <h1>Editar categoria : {title} </h1>
             </div>
             <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -37,28 +77,39 @@ function EditarCategoria() {
                 <h3 className="card-title">Informacion de la categoria</h3>
                 </div>
                 {/* /.card-header */}
+                {
+                    errors.map((error, i) => (
+                        <p className="text-danger" style={{margin: "1px"}} key={i}>
+                            {error}
+                        </p>  
+                    ))
+                }
                 {/* form start */}
                 <form onSubmit={handleSubmit}>
                 <div className="card-body">
                 <div className="form-group">
                     <label htmlFor="nombre">Nombre</label>
-                    <input
+                    <input required
                         type="text"
                         className="form-control"
                         name="nombre" id="nombre"
                         placeholder="Ingrese el nombre de la categoria"
+                        defaultValue={categoryData.nombre}
+                        onChange={handleChange}
                     />
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                         <label>Descripcion</label>
-                        <textarea className="form-control h-auto" name="descripcion" id="descripcion" rows="3" placeholder="Describa la categoria"></textarea>
+                        <textarea className="form-control h-auto" name="descripcion" id="descripcion" rows="3" placeholder="Describa la categoria"
+                            defaultValue={categoryData.descripcion}
+                            onChange={handleChange}>
+                            </textarea>
                     </div> 
                 </div>
                 {/* /.card-body */}
                 <div className="card-footer">
-                    <Link to="/categorias" className='mr-2'>
-                      <button type="button" className="btn btn-secondary">Atras</button>
-                    </Link>
+                    <button type="button" className="btn btn-secondary mr-2"
+                        onClick={()=> navigate(-1)}>Atras</button>
                     <button type="submit" className="btn btn-primary" >
                         Guardar
                     </button>

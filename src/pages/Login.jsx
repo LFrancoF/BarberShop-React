@@ -10,7 +10,7 @@ function Login() {
         password: "",
     });
 
-    const {login, user, emailAutocomplete, errors, isAuthenticated, loading} = useAuth()
+    const {login, errors, isAuthenticated, deleteErrors} = useAuth()
 
     const navigate = useNavigate()
 
@@ -30,6 +30,11 @@ function Login() {
         } catch (error) {
             console.log("Error en el login")
         }
+    }
+
+    const goToRegister = async e => {
+        deleteErrors()
+        navigate('/register')
     }
 
     if (isAuthenticated) return <Navigate to="/home" />
@@ -55,7 +60,7 @@ function Login() {
                     
                     <form onSubmit={handleLogin}>
                         <div className="input-group mb-3">
-                        <input type="email" name="email" className="form-control" placeholder="Email" value={emailAutocomplete ? emailAutocomplete : useForm.email} onChange={handleChange}/>
+                        <input type="email" name="email" className="form-control" placeholder="Email" onChange={handleChange}/>
                         <div className="input-group-append">
                             <div className="input-group-text">
                             <span className="fas fa-envelope" />
@@ -90,8 +95,8 @@ function Login() {
                     </form>
 
                     <br /> <br />
-                    <p className="mb-0">
-                        <Link to="/register" className="text-center">Registrarse</Link>
+                    <p className="mb-0" onClick={goToRegister}>
+                        <button className=" btn btn-light ">Registrarse</button>
                     </p>
                     </div>
                     {/* /.card-body */}

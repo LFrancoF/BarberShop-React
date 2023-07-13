@@ -1,10 +1,63 @@
-import { Link } from "react-router-dom"
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from "react-router-dom"
+import { getRolesRequest } from "../../api/roles.js"
+import { createUserRequest } from "../../api/usuarios.js"
 
 function CrearUsuario() {
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        console.log("Registrando usuario")
+    const [roles, setRoles] = useState([])
+    const [selectedElement, setSelectedElement] = useState("")
+    const [errors, setErrors] = useState([])
+    const [userData, setUserData] = useState({
+        nombre: "",
+        apellido: "",
+        email: "",
+        telefono: "",
+        password: "",
+        idRol: ""
+    })
+
+    useEffect(() => {
+        async function roles(){
+            try {
+              const list = await getRolesRequest()
+              setRoles(list.data)
+              setUserData({
+                ...userData,
+                ["idRol"]: list.data[0].idRol
+            })
+            } catch (error) {
+              setRoles([])
+            }
+          }
+          roles();
+    }, [])
+
+    const handleChangeOption = ({target}) => {
+        setSelectedElement(target.value)
+        setUserData({
+            ...userData,
+            ["idRol"]: target.value
+        })
+    }
+
+    const handleChange = ({target: {name, value}}) => {
+        setUserData({
+            ...userData,
+            [name]: value
+        })
+    }
+
+    const navigate = useNavigate()
+
+    const handleSubmit = async e => {
+        try {
+            e.preventDefault()
+            await createUserRequest(userData)
+            navigate('/usuarios')
+        } catch (error) {
+            setErrors(error.response.data)
+        }
         
     }
 
@@ -37,52 +90,65 @@ function CrearUsuario() {
                 <h3 className="card-title">Nuevo Usuario</h3>
                 </div>
                 {/* /.card-header */}
+                {
+                    errors.map((error, i) => (
+                        <p className="text-danger" style={{margin: "1px"}} key={i}>
+                            {error}
+                        </p>  
+                    ))
+                }
                 {/* form start */}
                 <form onSubmit={handleSubmit}>
                 <div className="card-body">
                 <div className="form-group">
                     <label htmlFor="nombre">Nombre</label>
-                    <input
+                    <input required
                         type="text"
                         className="form-control"
                         name="nombre" id="nombre"
                         placeholder="Ingrese el nombre"
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
                     <label htmlFor="apellido">Apellido</label>
-                    <input
+                    <input required
                         type="text"
                         className="form-control"
                         name="apellido" id="apellido"
                         placeholder="Ingrese el apellido"
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
                     <label htmlFor="email">Email</label>
-                    <input
+                    <input required
                         type="email"
                         className="form-control"
                         name="email" id="email"
                         placeholder="Ingrese el correo electronico"
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
                     <label htmlFor="telefono">Telefono</label>
-                    <input
+                    <input required
                         type="number"
+                        min="0"
                         className="form-control"
                         name="telefono" id="telefono"
                         placeholder="Ingrese el nro. de Telefono"
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input
+                    <input required
                         type="password"
                         className="form-control"
                         name="password" id="password"
                         placeholder="Ingrese la contraseña"
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
@@ -90,19 +156,20 @@ function CrearUsuario() {
                         <select
                             className="form-control select2"
                             style={{ width: "100%" }}
-                            name="rol"
-                        >
-                            <option value="selected">Rol 1</option>
-                            <option>Rol 2</option>
-                            <option>Rol 3</option>
+                            name="rol" id="rol"
+                            value={selectedElement}
+                            onChange={handleChangeOption}
+                        >   
+                            {roles.map(rol => (
+                                <option value={rol.idRol} key={rol.idRol}> {rol.nombre} </option>
+                            ))}
                         </select>
                     </div>
                 </div>
                 {/* /.card-body */}
                 <div className="card-footer">
-                    <Link to="/usuarios" className='mr-2'>
-                      <button type="button" className="btn btn-secondary">Atras</button>
-                    </Link>
+                    <button type="button" className="btn btn-secondary mr-2"
+                       onClick={()=> navigate(-1)}>Atras</button>
                     <button type="submit" className="btn btn-primary">
                         Crear
                     </button>

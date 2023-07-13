@@ -15,11 +15,10 @@ function Register() {
         email: "",
         telefono: "",
         password: "",
-        idRol: "3",
-        preferencia : null
+        idRol: "1",
     });
 
-    const {signup, user, errors: registerErrors, isAuthenticated} = useAuth()
+    const {signup, user, errors: registerErrors, isAuthenticated, deleteErrors} = useAuth()
     
     const navigate = useNavigate()
 
@@ -30,15 +29,20 @@ function Register() {
         })
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         try {
             e.preventDefault()
-            signup(userDataForm)
-            navigate('/login')
+            const res = await signup(userDataForm)
+            if (res) navigate('/login')
         } catch (error) {
             console.log("Error en el registro")
         }
         
+    }
+
+    const goToLogin = async e => {
+        deleteErrors()
+        navigate('/login')
     }
 
     if (isAuthenticated) return <Navigate  to="/home" />
@@ -179,9 +183,9 @@ function Register() {
                     </form>
 
                     <br />
-                    <Link to="/login" className="text-center">
-                    Ya tengo una cuenta
-                    </Link>
+                    <p className="mb-0" onClick={goToLogin}>
+                        <button className=" btn btn-light ">Ya tengo una cuenta</button>
+                    </p>
                 </div>
                 {/* /.form-box */}
                 </div>

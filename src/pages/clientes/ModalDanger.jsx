@@ -1,5 +1,16 @@
+import { deleteClientRequest } from "../../api/clientes.js"
 
-function ModalDanger() {
+function ModalDanger({idClient, refreshList}) {
+
+  const deleteClient = async () => {
+    try {
+      await deleteClientRequest(idClient)
+      refreshList()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="modal fade" id="modal-danger">
       <div className="modal-dialog modal-dialog-centered" role="document">
@@ -12,7 +23,7 @@ function ModalDanger() {
               data-dismiss="modal"
               aria-label="Close"
             >
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true">x</span>
             </button>
           </div>
           <div className="modal-body">
@@ -20,7 +31,7 @@ function ModalDanger() {
           </div>
           <div className="modal-footer">
           <button type="button" className="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="button" className="btn btn-primary">Si</button>
+        <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={deleteClient}>Si</button>
           </div>
         </div>
         {/* /.modal-content */}

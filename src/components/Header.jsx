@@ -93,14 +93,8 @@ function Header() {
           <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <span className="dropdown-item dropdown-header">Opciones</span>
             <div className="dropdown-divider" />
-            <Link to="/citas" className="dropdown-item">
-              <i className="fas fa-file mr-2" /> Reporte citas
-              <span className="float-right text-muted text-sm">2 days</span>
-            </Link>
-            <div className="dropdown-divider" />
-            <Link to="#" className="dropdown-item">
-              <i className="fas fa-file mr-2" /> Acerca del Proyecto
-              <span className="float-right text-muted text-sm">12 hours</span>
+            <Link to="/profile" className="dropdown-item">
+              <i className="fas fa-file mr-2" /> Mi Perfil
             </Link>
             <div className="dropdown-divider" />
             <div to="" className="dropdown-item dropdown-footer">

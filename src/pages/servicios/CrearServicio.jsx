@@ -1,9 +1,12 @@
-import {useState} from 'react'
-import { Link } from "react-router-dom"
+import {useState, useEffect} from 'react'
+import { Link, useNavigate } from "react-router-dom"
 import { createServiceRequest } from "../../api/servicios.js"
+import { getCategoriesRequest } from "../../api/categorias.js"
 
 function CrearServicio() {
 
+    const [categories, setCategories] = useState([])
+    const [errors, setErrors] = useState([])
     const [imagenName, setImagenName] = useState("")
     const [selectedElements, setSelectedElements] = useState("")
     const [serviceData, setServiceData] = useState({
@@ -12,8 +15,24 @@ function CrearServicio() {
         precio: "",
         duracion: "",
         descripcion: "",
-        idCategoria: "1"
+        idCategoria: ""
     })
+
+    useEffect(() => {
+        async function categorias(){
+            try {
+              const list = await getCategoriesRequest()
+              setCategories(list.data)
+              setServiceData({
+                ...serviceData,
+                ["idCategoria"]: list.data[0].idCategoria
+            })
+            } catch (error) {
+                setCategories([])
+            }
+          }
+          categorias();
+    }, [])
 
     const handleChangeImage = ({target}) => {
         setImagenName(target.files[0].name)
@@ -53,14 +72,15 @@ function CrearServicio() {
         })
     }
 
+    const navigate = useNavigate()
+
     const handleSubmit = async (e) => {
         try {
             e.preventDefault()
-            console.log(serviceData)
             const res = await createServiceRequest(serviceData)
-            console.log(res)
+            navigate('/servicios')
         } catch (error) {
-            console.log(error)
+            setErrors(error.response.data)
         }
     }
 
@@ -93,12 +113,19 @@ function CrearServicio() {
                 <h3 className="card-title">Nuevo Servicio</h3>
                 </div>
                 {/* /.card-header */}
+                {
+                    errors.map((error, i) => (
+                        <p className="text-danger" style={{margin: "1px"}} key={i}>
+                            {error}
+                        </p>  
+                    ))
+                }
                 {/* form start */}
                 <form onSubmit={handleSubmit}>
                 <div className="card-body">
                     <div className="form-group">
                         <label htmlFor="nombre">Nombre</label>
-                        <input
+                        <input required
                             type="text"
                             className="form-control"
                             name="nombre" id="nombre"
@@ -132,8 +159,10 @@ function CrearServicio() {
                     </div>
                     <div className="form-group">
                         <label htmlFor="precio">Precio (Bs)</label>
-                        <input
+                        <input required
                             type="number"
+                            min="0"
+                            step=".01"
                             className="form-control"
                             name="precio" id="precio"
                             placeholder="Ingrese el precio del servicio"
@@ -141,9 +170,10 @@ function CrearServicio() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="duracion">Duracion (horas)</label>
+                        <label htmlFor="duracion">Duracion (minutos)</label>
                         <input
                             type="number"
+                            min="0"
                             className="form-control"
                             name="duracion" id="duracion"
                             placeholder="Ingrese la duracion del servicio"
@@ -167,16 +197,16 @@ function CrearServicio() {
                             value={selectedElements}
                             onChange={handleChangeOption}
                         >
-                            <option value="1" >Peluqueria</option>
-                            <option value="2" >tratamientos faciales</option>
+                            {categories.map(cat => (
+                                <option value={cat.idCategoria} key={cat.idCategoria}>{cat.nombre}</option>
+                            ))}
                         </select>
                     </div>
                 </div>
                 {/* /.card-body */}
                 <div className="card-footer">
-                    <Link to="/servicios" className="mr-2">
-                        <button type="button" className="btn btn-secondary">Atras</button>
-                    </Link>
+                    <button type="button" className="btn btn-secondary mr-2"
+                       onClick={()=> navigate(-1)}>Atras</button>
                     <button type="submit" className="btn btn-primary">
                         Crear
                     </button>

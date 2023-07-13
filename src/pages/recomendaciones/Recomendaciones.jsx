@@ -1,16 +1,32 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import { Link, useNavigate } from "react-router-dom"
+import { getCategoriesRequest } from "../../api/categorias.js"
 
 function Recomendaciones() {
 
+  const [categories, setCategories] = useState([])
   const [imagenName, setImagenName] = useState("")
-    const [selectedElements, setSelectedElements] = useState("")
-    const [formData, setFormData] = useState({
-        idCategoria: "1",
-        imagen: null
-    })
+  const [selectedElements, setSelectedElements] = useState("")
+  const [formData, setFormData] = useState({
+      idCategoria: "",
+      imagen: null
+  })
 
-  const navigate = useNavigate()
+  useEffect(() => {
+    async function categorias(){
+        try {
+          const list = await getCategoriesRequest()
+          setCategories(list.data)
+          setFormData({
+            ...formData,
+            ["idCategoria"]: list.data[0].idCategoria
+        })
+        } catch (error) {
+            setCategories([])
+        }
+      }
+      categorias();
+    }, [])
 
   const handleChangeImage = ({target}) => {
     setImagenName(target.files[0].name)
@@ -42,11 +58,16 @@ function Recomendaciones() {
     })
   }
 
-  const handleSubmit = (e) =>{
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) =>{
     try {
       e.preventDefault()
-      console.log(formData)
-      //navigate to services recomend
+      function timeout(n) {
+        return new Promise( res => setTimeout(res, n) );
+      }
+      await timeout(2500); 
+      navigate('/recomendaciones/lista')
       
     } catch (error) {
       console.log(error)
@@ -64,8 +85,8 @@ function Recomendaciones() {
             </div>
             <div className="col-sm-5">
             <ol className="breadcrumb float-sm-right">
-              <li className="breadcrumb-item"><a href="#">Home</a></li>
-              <li className="breadcrumb-item active">Projects</li>
+              <li className="breadcrumb-item">Home</li>
+              <li className="breadcrumb-item active">Recomendacion</li>
             </ol>
           </div>
           </div>
@@ -91,8 +112,9 @@ function Recomendaciones() {
                     value={selectedElements}
                     onChange={handleChangeOption}
                   >
-                    <option value="1" >Peluqueria</option>
-                    <option value="2" >tratamientos faciales</option>
+                    {categories.map(cat => (
+                        <option value={cat.idCategoria} key={cat.idCategoria}>{cat.nombre}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="form-group">

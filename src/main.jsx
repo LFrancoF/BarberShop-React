@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
 import App from './App'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { HelmetProvider } from "react-helmet-async"
@@ -18,7 +17,7 @@ import { AuthProvider } from './context/authContext'
 const router = createBrowserRouter([
   {
       path: "/login",
-      element: <Login />,
+      element: <Login />
   },
   {
       path: "/register",
@@ -42,11 +41,11 @@ const router = createBrowserRouter([
               element: <CrearUsuario/>,
           },
           {
-              path: "usuarios/ver",
+              path: "usuarios/ver/:id",
               element: <InfoUsuario/>,
           },
           {
-              path: "usuarios/editar",
+              path: "usuarios/editar/:id",
               element: <EditarUsuario/>,
           },
       {
@@ -58,11 +57,11 @@ const router = createBrowserRouter([
           element: <CrearCliente/>,
       },
       {
-          path: "clientes/ver",
+          path: "clientes/ver/:id",
           element: <InfoCliente/>,
       },
       {
-          path: "clientes/editar",
+          path: "clientes/editar/:id",
           element: <EditarCliente/>,
       },
           {
@@ -74,11 +73,11 @@ const router = createBrowserRouter([
               element: <CrearBarbero/>,
           },
           {
-              path: "barberos/ver",
+              path: "barberos/ver/:id",
               element: <InfoBarbero/>,
           },
           {
-              path: "barberos/editar",
+              path: "barberos/editar/:id",
               element: <EditarBarbero/>,
           },
       {
@@ -90,11 +89,11 @@ const router = createBrowserRouter([
           element: <CrearServicio/>,
       },
       {
-          path: "servicios/ver",
+          path: "servicios/ver/:id",
           element: <InfoServicio/>,
       },
       {
-          path: "servicios/editar",
+          path: "servicios/editar/:id",
           element: <EditarServicio/>,
       },
           {
@@ -106,11 +105,11 @@ const router = createBrowserRouter([
               element: <CrearCategoria/>,
           },
           {
-              path: "categorias/ver",
+              path: "categorias/ver/:id",
               element: <InfoCategoria/>,
           },
           {
-              path: "categorias/editar",
+              path: "categorias/editar/:id",
               element: <EditarCategoria/>,
           },
       {
@@ -134,18 +133,19 @@ const router = createBrowserRouter([
               element: <CrearCita/>,
           },
           {
-              path: "citas/editar",
+              path: "citas/editar/:id",
               element: <EditarCita/>,
           },
           {
-              path: "citas/ver",
+              path: "citas/ver/:id",
               element: <InfoCita/>,
           },
       {
           path: "profile",
           element: <Profile/>,
       },
-      ]
+      ],
+      errorElement: <ErrorPage/>
   },
 ])
 

@@ -1,13 +1,54 @@
-import { Link } from "react-router-dom"
-import { Helmet } from 'react-helmet-async'
+import { useEffect, useState } from "react"
+import { useNavigate, useParams, Link } from "react-router-dom"
+import { getCitaRequest, editCitaRequest } from "../../api/citas.js"
 
 function EditarCita() {
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        console.log("editando cita")
-        
-    }
+  const [errors, setErrors] = useState([])
+  const [title, setTitle] = useState("")
+  const [citaData, setCitaData] = useState({
+    idCita: "",
+    nota: "",
+    estado: ""
+  })
+
+  const params = useParams()
+
+  useEffect(() => {
+      async function cita(){
+          if (params.id){
+              const res = await getCitaRequest(params.id)
+              setCitaData({
+                idCita: res.data.idCita,
+                nota: res.data.nota,
+                estado: res.data.estado,
+              })
+              setTitle(res.data.idCita)
+          }
+      }
+      cita()
+  }, [])
+
+  const handleChange = ({target: {name, value}}) => {
+      setCitaData({
+          ...citaData,
+          [name]: value
+      })
+  }
+  
+  const navigate = useNavigate()
+
+  const handleSubmit = async e => {
+      try {
+          e.preventDefault()
+          await editCitaRequest(params.id, citaData)
+          navigate('/citas')
+
+      } catch (error) {
+          setErrors(error.response.data)
+      }
+      
+  }
 
     return (
       <>
@@ -15,7 +56,7 @@ function EditarCita() {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Editar datos de Cita</h1>
+                <h1>Editar Cita : {citaData.idCita}</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -36,99 +77,44 @@ function EditarCita() {
                 <h3 className="card-title">Editar Cita</h3>
               </div>
               {/* /.card-header */}
+              {
+                    errors.map((error, i) => (
+                        <p className="text-danger" style={{margin: "1px"}} key={i}>
+                            {error}
+                        </p>  
+                    ))
+                }
               {/* form start */}
               <form onSubmit={handleSubmit}>
                 <div className="card-body">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Paciente</label>
-                        <select
-                          className="form-control select2"
-                          style={{ width: "100%" }}
-                          name="paciente"
-                        >
-                          <option value="selected">Paciente 1</option>
-                          <option>Paciente 2</option>
-                          <option>Paciente 3</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                            <label>Date:</label>
-                            <div className="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" className="form-control datetimepicker-input" data-target="#reservationdate"/>
-                                <div className="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                    <div className="input-group-text"><i className="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Barbero</label>
-                        <select
-                          className="form-control select2"
-                          style={{ width: "100%" }}
-                          name="barbero"
-                        >
-                          <option value="selected">Barbero 1</option>
-                          <option>Barbero 2</option>
-                          <option>Barbero 3</option>
-                        </select>
-                      </div>
-                      <div className="bootstrap-timepicker">
-                            <div className="form-group">
-                                <label>Time:</label>
-                                <div
-                                className="input-group date"
-                                id="timepicker"
-                                data-target-input="nearest"
-                                >
-                                <input
-                                    type="text"
-                                    className="form-control datetimepicker-input"
-                                    data-target="#timepicker"
-                                />
-                                <div
-                                    className="input-group-append"
-                                    data-target="#timepicker"
-                                    data-toggle="datetimepicker"
-                                >
-                                    <div className="input-group-text">
-                                    <i className="far fa-clock" />
-                                    </div>
-                                </div>
-                                </div>
-                                {/* /.input group */}
-                            </div>
-                        </div>
-                    </div>
-                  </div>
+                  
 
-                    <div className="form-group">
-                        <label>Observacion</label>
-                        <textarea className="form-control h-auto" name="descripcion" id="descripcion" rows="3" placeholder="Ingrese una observacion"></textarea>
-                    </div>
+                  <div className="form-group">
+                      <label>Nota</label>
+                      <textarea className="form-control h-auto" name="nota" id="nota" rows="3" placeholder="Ingrese una observacion"
+                      defaultValue={citaData.nota} onChange={handleChange}></textarea>
+                  </div>
 
                   <div className="form-group">
                     <label>Estado</label>
                     <select
                       className="form-control select2"
                       style={{ width: "100%" }}
-                      name="estado"
+                      name="estado" id="estado"
+                      value={citaData.estado}
+                      onChange={handleChange}
                     >
-                      <option value="selected">Asignada</option>
-                      <option>Finalizada</option>
-                      <option>Cancelada</option>
-                      <option>Reagendada</option>
+                      <option>Pendiente</option>
+                      <option>Asignado</option>
+                      <option>Cancelado</option>
+                      <option>Reagendado</option>
                     </select>
                   </div>
                 </div>
                 {/* /.card-body */}
                 <div className="card-footer">
-                    <Link to="/citas">
-                        <button type="button" className="btn btn-secondary">Atras</button>
-                    </Link>
+                    <button type="button" className="btn btn-secondary mr-2"
+                        onClick={()=> navigate(-1)}>Atras</button>
                     <button type="submit" className="btn btn-primary ml-2">
                         Editar
                     </button>
@@ -138,10 +124,6 @@ function EditarCita() {
             {/* /.card */}
           </div>
         </section>
-        <Helmet>
-          <script src="/adminlte-react/datatime.js"> 
-          </script>
-        </Helmet>
       </>
     );
 }

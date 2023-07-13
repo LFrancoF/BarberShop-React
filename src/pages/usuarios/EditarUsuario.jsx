@@ -1,10 +1,56 @@
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams, Link } from "react-router-dom"
+import { editUserRequest, getUserRequest } from "../../api/usuarios.js"
 
 function EditarUsuario() {
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        console.log("editando usuario")
+    const [errors, setErrors] = useState([])
+    const [title, setTitle] = useState({
+        nombre: "", apellido: ""
+    })
+    const [userData, setUserData] = useState({
+        nombre: "",
+        apellido: "",
+        email: "",
+        telefono: ""
+    })
+
+    const params = useParams()
+
+    useEffect(() => {
+        async function usuarioData(){
+            if (params.id){
+                const res = await getUserRequest(params.id)
+                setUserData({
+                    nombre: res.data.nombre,
+                    apellido: res.data.apellido,
+                    email: res.data.email,
+                    telefono: res.data.telefono
+                })
+                setTitle({nombre: res.data.nombre, apellido: res.data.apellido,})
+            }
+        }
+        usuarioData()
+    }, [])
+
+    const handleChange = ({target: {name, value}}) => {
+        setUserData({
+            ...userData,
+            [name]: value
+        })
+    }
+    
+    const navigate = useNavigate()
+
+    const handleSubmit = async e => {
+        try {
+            e.preventDefault()
+            await editUserRequest(params.id, userData)
+            navigate('/usuarios')
+
+        } catch (error) {
+            setErrors(error)
+        }
         
     }
 
@@ -14,7 +60,7 @@ function EditarUsuario() {
         <div className="container-fluid">
             <div className="row mb-2">
             <div className="col-sm-6">
-                <h1>Editar usuario : Gustavo Franco</h1>
+                <h1>Editar usuario : {title.nombre} {title.apellido} </h1>
             </div>
             <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -37,51 +83,66 @@ function EditarUsuario() {
                 <h3 className="card-title">Informacion de Usuario</h3>
                 </div>
                 {/* /.card-header */}
+                {
+                    errors.map((error, i) => (
+                        <p className="text-danger" style={{margin: "1px"}} key={i}>
+                            {error}
+                        </p>  
+                    ))
+                }
                 {/* form start */}
                 <form onSubmit={handleSubmit}>
                 <div className="card-body">
                 <div className="form-group">
                     <label htmlFor="nombre">Nombre</label>
-                    <input
+                    <input required
                         type="text"
                         className="form-control"
                         name="nombre" id="nombre"
                         placeholder="Ingrese el nombre"
+                        defaultValue={userData.nombre}
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
                     <label htmlFor="apellido">Apellido</label>
-                    <input
+                    <input required
                         type="text"
                         className="form-control"
                         name="apellido" id="apellido"
                         placeholder="Ingrese el apellido"
+                        defaultValue={userData.apellido}
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
                     <label htmlFor="email">Email</label>
-                    <input
+                    <input required
                         type="email"
                         className="form-control"
                         name="email" id="email"
                         placeholder="Ingrese el correo electronico"
+                        defaultValue={userData.email}
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="form-group">
                     <label htmlFor="telefono">Telefono</label>
-                    <input
+                    <input required
                         type="number"
+                        min="0"
                         className="form-control"
                         name="telefono" id="telefono"
                         placeholder="Ingrese el nro. de Telefono"
+                        defaultValue={userData.telefono}
+                        onChange={handleChange}
                     />
                     </div>
                 </div>
                 {/* /.card-body */}
                 <div className="card-footer">
-                    <Link to="/usuarios" className='mr-2'>
-                      <button type="button" className="btn btn-secondary">Atras</button>
-                    </Link>
+                    <button type="button" className="btn btn-secondary mr-2"
+                       onClick={()=> navigate(-1)}>Atras</button>
                     <button type="submit" className="btn btn-primary" >
                         Guardar
                     </button>
