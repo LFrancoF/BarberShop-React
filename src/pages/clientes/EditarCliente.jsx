@@ -142,7 +142,7 @@ function EditarCliente() {
                     </div>
                     <div className="form-group">
                     <label htmlFor="preferencia">Preferencia</label>
-                    <input required
+                    <input
                         type="text"
                         className="form-control"
                         name="preferencia" id="preferencia"
