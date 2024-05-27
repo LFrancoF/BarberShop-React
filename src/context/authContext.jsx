@@ -29,7 +29,7 @@ export function AuthProvider({children}) {
                 if (!res.data){
                     setIsAuthenticated(false)
                     return;
-                } 
+                }
                 setIsAuthenticated(true)
                 setUser(res.data)
             } catch (error) {
